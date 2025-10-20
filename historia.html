@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Historia - Instituto Dionisio de Herrera</title>
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ 
+    font-family:Arial, sans-serif; 
+    min-height:100vh;
+    overflow-x:hidden;
+    transition:background 0.5s, color 0.5s;
+    position:relative;
+  }
+
+  body.noche { background:#000; color:#fff; }
+  body.dia { background:#fff; color:#000; }
+
+  body::before{
+    content:"";
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:url('escudo.png') no-repeat center center;
+    background-size:350px;
+    opacity:0.07;
+    z-index:-1;
+    pointer-events:none;
+  }
+
+  header{ text-align:center; padding:60px 20px 20px; }
+  header h1{ font-size:2.5rem; margin-bottom:12px; }
+  header p{ font-size:1.1rem; margin-bottom:20px; }
+
+  nav{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+    padding:20px;
+  }
+  nav a{
+    display:inline-block;
+    padding:12px 22px;
+    border-radius:10px;
+    font-size:1rem;
+    text-decoration:none;
+    transition:all .3s ease;
+    animation: glow 2s infinite alternate;
+  }
+
+  body.noche nav a{ background:#000; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+  body.noche nav a:hover{ background:#b50000; transform:translateY(-5px) scale(1.05); }
+
+  body.dia nav a{ background:#b50000; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+  body.dia nav a:hover{ background:#000; color:#fff; transform:translateY(-5px) scale(1.05); }
+
+  main{
+    max-width:900px;
+    margin:40px auto;
+    padding:20px;
+    line-height:1.7;
+    text-align:justify;
+  }
+
+  footer{
+    text-align:center;
+    padding:20px;
+    font-size:0.9rem;
+    position:relative;
+    width:100%;
+    transition:background 0.5s, color 0.5s;
+  }
+  body.noche footer{ background:#000; color:#fff; animation: glowText 2s infinite alternate; }
+  body.dia footer{ background:#b50000; color:#fff; }
+
+  .toggle-btn{
+    position:fixed;
+    top:20px; right:20px;
+    background:#b50000;
+    color:#fff;
+    border:none;
+    border-radius:50%;
+    width:45px; height:45px;
+    cursor:pointer;
+    font-size:1.2rem;
+    z-index:1000;
+    transition:transform .3s ease;
+  }
+  .toggle-btn:hover{ transform:scale(1.1) rotate(10deg); }
+
+  #particles-js { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; }
+
+  @keyframes glow{ from{box-shadow:0 0 10px #b50000;} to{box-shadow:0 0 25px #ff3333;} }
+  @keyframes glowText{ from{text-shadow:0 0 5px #b50000;} to{text-shadow:0 0 15px #ff3333;} }
+
+  /* === Sabías que === */
+  .sabias-que {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .sabias-que h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    animation: glowText 2s infinite alternate;
+  }
+
+  .sabias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: rgba(0,0,0,0.6);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 0 15px rgba(181,0,0,0.5);
+    transition: transform 0.4s, box-shadow 0.4s;
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  body.dia .card {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 15px rgba(181,0,0,0.3);
+  }
+
+  .card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 0 25px rgba(181,0,0,0.8);
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.8s ease-out;
+  }
+
+  /* === Autoridades === */
+  .autoridades {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .autoridades h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    animation: glowText 2s infinite alternate;
+  }
+
+  .autoridades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .autor-card {
+    background: rgba(0,0,0,0.6);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 0 15px rgba(181,0,0,0.5);
+    transition: transform 0.4s, box-shadow 0.4s;
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  body.dia .autor-card {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 15px rgba(181,0,0,0.3);
+  }
+
+  .autor-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 0 25px rgba(181,0,0,0.8);
+  }
+</style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <button class="toggle-btn" id="themeToggle">☀️</button>
+
+  <header>
+    <h1>Nuestra Historia</h1>
+    <p>Un legado de excelencia educativa en Honduras.</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="historia.html">Historia</a>
+    <a href="oferta.html">Oferta Académica</a>
+    <a href="perfiles.html">Perfiles</a>
+    <a href="actividades.html">Actividades</a>
+    <a href="dionisio.html">Dionisio de Herrera</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+
+  <main>
+    <center><h2>Orígenes</h2></center>
+    <p>
+      El Instituto Dionisio de Herrera fue fundado el 09 de octubre de 1993, con la misión de 
+      ofrecer educación de calidad, basada en disciplina, valores morales, espirituales y culturales.
+    </p>
+
+    <center><h2>Evolución</h2></center>
+    <p>
+      Con más de 20 años de funcionamiento, el Instituto Dionisio de Herrera ha formado hombres 
+      y mujeres que contribuyen al desarrollo del país. A lo largo de los años, el instituto ha crecido 
+      en infraestructura, programas educativos y actividades extracurriculares, adaptándose a las 
+      necesidades cambiantes de la sociedad hondureña.
+    </p>
+
+    <center><h2>Legado</h2></center>
+    <p>
+      Miles de estudiantes han pasado por nuestras aulas, destacándose en diferentes ámbitos 
+      profesionales y siendo agentes de cambio en sus comunidades. Nuestro compromiso es seguir 
+      ofreciendo excelencia educativa para las nuevas generaciones.
+    </p>
+  </main>
+
+  <!-- Sección Autoridades -->
+  <section class="autoridades">
+    <h2>Autoridades</h2>
+    <div class="autoridades-grid">
+      <div class="autor-card fade-up">
+        <h3>👩‍🏫 Rectora</h3>
+        <p><strong>Lic. Michelle Ortega</strong></p>
+      </div>
+      <div class="autor-card fade-up">
+        <h3>👨‍🏫 Director</h3>
+        <p><strong>Lic. Juan Carlos Castillo</strong></p>
+      </div>
+      <div class="autor-card fade-up">
+        <h3>👨‍💼 Subdirector</h3>
+        <p><strong>Lic. Daniel Barrientos</strong></p>
+      </div>
+      <div class="autor-card fade-up">
+        <h3>📝 Secretaria</h3>
+        <p><strong>Lic. Mariela Martínez</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Sabías que -->
+  <section class="sabias-que">
+    <h2>¿Sabías que…?</h2>
+    <div class="sabias-grid">
+      <div class="card fade-up">
+        <h3>📖 Educación</h3>
+        <p>El Instituto Dionisio de Herrera fue fundado en 1993, con la misión de brindar una educación basada en valores y disciplina.</p>
+      </div>
+      <div class="card fade-up">
+        <h3>🎓 Egresados</h3>
+        <p>Más de 32 generaciones de estudiantes se han graduado y han aportado al desarrollo del país en diferentes áreas.</p>
+      </div>
+      <div class="card fade-up">
+        <h3>🏫 Comunidad</h3>
+        <p>El instituto organiza actividades académicas y recreativas que fortalecen la convivencia estudiantil.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Instituto Dionisio de Herrera - Tegucigalpa, Honduras
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    function loadParticles(color){
+      if(window.pJSDom && window.pJSDom.length) {
+        window.pJSDom[0].pJS.fn.vendors.destroypJS();
+        window.pJSDom = [];
+      }
+      particlesJS("particles-js", {
+        "particles": {
+          "number": {"value": 60, "density": {"enable": true, "value_area": 800}},
+          "color": {"value": color},
+          "shape": {"type": "circle"},
+          "opacity": {"value": 0.4, "random": true},
+          "size": {"value": 4, "random": true},
+          "line_linked": {"enable": true, "distance": 150, "color": color, "opacity": 0.3, "width": 1},
+          "move": {"enable": true, "speed": 2}
+        },
+        "interactivity": {
+          "events": {
+            "onhover": {"enable": true, "mode": "repulse"},
+            "onclick": {"enable": true, "mode": "push"}
+          },
+          "modes": {
+            "repulse": {"distance": 100},
+            "push": {"particles_nb": 4}
+          }
+        },
+        "retina_detect": true
+      });
+    }
+
+    let theme = localStorage.getItem("theme") || "noche";
+    document.body.classList.add(theme);
+    loadParticles(theme === "dia" ? "#b50000" : "#ffffff");
+
+    const toggleBtn = document.getElementById("themeToggle");
+    function updateBtn(){
+      toggleBtn.textContent = theme === "dia" ? "🌙" : "☀️";
+    }
+    updateBtn();
+
+    toggleBtn.addEventListener("click", ()=>{
+      document.body.classList.remove(theme);
+      theme = (theme === "dia" ? "noche" : "dia");
+      document.body.classList.add(theme);
+      localStorage.setItem("theme", theme);
+      loadParticles(theme === "dia" ? "#b50000" : "#ffffff");
+      updateBtn();
+    });
+
+    // Animación de tarjetas al hacer scroll
+    const cards = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    cards.forEach(card => observer.observe(card));
+  </script>
+</body>
+</html>
+

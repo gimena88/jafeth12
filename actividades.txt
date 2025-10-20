@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Actividades</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:Arial, sans-serif;
+    min-height:100vh;
+    transition:background .5s,color .5s;
+    position:relative;
+    overflow-x:hidden;
+    color:#fff;
+  }
+
+  /* temas */
+  body.noche{ background:#000; color:#fff; }
+  body.dia{ background:#fff; color:#111; }
+
+  /* escudo de fondo */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background:url('escudo.png') no-repeat center center;
+    background-size:350px;
+    opacity:.07;
+    z-index:-1;
+    pointer-events:none;
+  }
+
+  /* NAV */
+  nav{ display:flex; flex-wrap:wrap; gap:16px; justify-content:center; padding:18px; position:relative; z-index:3; }
+  nav a{
+    display:inline-block;
+    padding:12px 20px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:700;
+    transition:all .25s;
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+    animation: glow 2s infinite alternate; /* <-- glow rojo */
+  }
+  /* estilos por tema */
+  body.noche nav a{ background:#000; color:#fff; }
+  body.noche nav a:hover{ background:#b50000; transform:translateY(-5px) scale(1.03); }
+  body.dia nav a{ background:#b50000; color:#fff; }
+  body.dia nav a:hover{ background:#000; color:#fff; transform:translateY(-5px) scale(1.03); }
+
+  nav a[aria-current="page"]{
+    box-shadow:0 8px 30px rgba(181,0,0,.40);
+  }
+
+  /* botón tema */
+  .toggle-btn{
+    position:fixed; top:16px; right:16px; z-index:1200;
+    width:46px;height:46px;border-radius:50%;border:none;background:#b50000;color:#fff;
+    cursor:pointer;font-size:18px; display:flex;align-items:center;justify-content:center;
+    transition:transform .2s;
+  }
+  .toggle-btn:hover{ transform:scale(1.08); }
+
+  /* HEADER */
+  header{ text-align:center; padding:40px 18px 6px; z-index:2; position:relative; }
+  header h1{ font-size:2rem; margin-bottom:6px; color:#fff; text-shadow:0 3px 8px rgba(0,0,0,.35); }
+  body.dia header h1{ color:#111; text-shadow:none; }
+  header p{ margin-bottom:18px; opacity:.95; color:inherit; }
+
+  /* LAYOUT */
+  main{ max-width:1100px; margin:20px auto 140px; padding:0 18px; z-index:2; position:relative; }
+  .grid{ display:grid; gap:22px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); }
+
+  /* TARJETAS */
+  .card{
+    background:rgba(255,255,255,0.06);
+    border-radius:12px; overflow:hidden; position:relative;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
+    transition:transform .35s, box-shadow .35s, filter .35s;
+    transform-origin:center;
+    opacity:0; transform:translateY(28px) scale(.98);
+    animation:fadeUp .7s ease forwards;
+  }
+  body.dia .card{ background:rgba(0,0,0,0.04); color:#111; }
+
+  /* hover sin zoom */
+  .card:hover{
+    transform:translateY(-8px) scale(1.02);
+    box-shadow:0 22px 48px rgba(0,0,0,.36);
+    filter:brightness(1.03);
+  }
+
+  /* glow animado alrededor */
+  .card::before{
+    content:"";
+    position:absolute; inset:0;
+    border-radius:12px;
+    padding:2px;
+    background:linear-gradient(90deg,#b50000,#ff7a50,#b50000);
+    background-size:200% 200%;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events:none;
+    animation:borderGlow 4s linear infinite;
+    opacity:.25;
+  }
+
+  .thumb{ width:100%; height:190px; object-fit:cover; display:block; }
+  .content{ padding:14px 16px; }
+  .content h3{ margin:0 0 8px; color:#b50000; font-size:1.05rem; }
+  body.dia .content h3{ color:#b50000; }
+  .desc{ font-size:0.95rem; line-height:1.5; color:inherit; }
+
+  /* FOOTER */
+  footer{ position:fixed; left:0; right:0; bottom:0; text-align:center; padding:12px 10px; font-size:.92rem; z-index:2; }
+  body.noche footer{ background:#000; color:#fff; }
+  body.dia footer{ background:#b50000; color:#fff; }
+
+  #particles-js{ position:fixed; inset:0; z-index:-2; }
+
+  /* anims */
+  @keyframes fadeUp { to{ opacity:1; transform:translateY(0) scale(1); } }
+  @keyframes borderGlow { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+  @keyframes glow{ from{box-shadow:0 0 10px #b50000} to{box-shadow:0 0 28px #ff3333} }
+
+  /* stagger delays */
+  .grid .card:nth-child(1){ animation-delay:0.18s; }
+  .grid .card:nth-child(2){ animation-delay:0.34s; }
+  .grid .card:nth-child(3){ animation-delay:0.52s; }
+  .grid .card:nth-child(4){ animation-delay:0.70s; }
+  .grid .card:nth-child(5){ animation-delay:0.88s; }
+  .grid .card:nth-child(6){ animation-delay:1.06s; }
+
+  @media (max-width:520px){
+    .thumb{ height:160px; }
+  }
+</style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <button class="toggle-btn" id="themeToggle" title="Cambiar modo">🌙</button>
+
+  <header>
+    <h1>Actividades</h1>
+    <p>Eventos recreativos que fortalecen la convivencia estudiantil</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="historia.html">Historia</a>
+    <a href="oferta.html">Oferta Académica</a>
+    <a href="perfiles.html">Perfiles</a>
+    <a href="actividades.html" aria-current="page">Actividades</a>
+    <a href="dionisio.html">Dionisio de Herrera</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+
+  <main>
+    <div class="grid">
+      <article class="card">
+        <img class="thumb" src="color_day.jpeg" alt="Color Day">
+        <div class="content">
+          <h3>Color Day</h3>
+          <p class="desc">Jornada de integración en la que los estudiantes utilizan colores temáticos para fomentar la unidad, el espíritu escolar y la recreación.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="thumb" src="movie_day.jpeg" alt="Movie Day">
+        <div class="content">
+          <h3>Movie Day</h3>
+          <p class="desc">Actividad de esparcimiento que consiste en la proyección de películas en un ambiente de convivencia, promoviendo la recreación y la amistad entre compañeros.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="thumb" src="gran_fiesta.jpeg" alt="Gran Fiesta Estudiantil">
+        <div class="content">
+          <h3>Gran Fiesta Estudiantil</h3>
+          <p class="desc">Evento recreativo organizado por el gobierno estudiantil con música, baile y talentos, fortaleciendo la integración y recaudando fondos para proyectos escolares.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="thumb" src="pajamas_day.jpeg" alt="Pajama's Day">
+        <div class="content">
+          <h3>Pajama's Day & Talents Show</h3>
+          <p class="desc">Jornada divertida donde los alumnos asisten con pijamas y participan en presentaciones artísticas, fomentando la creatividad y el compañerismo.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="thumb" src="dia_del_nino.jpeg" alt="Día del Niño">
+        <div class="content">
+          <h3>Día del Niño</h3>
+          <p class="desc">Celebración especial con juegos, sorpresas y concursos como el mejor antifaz, creada para promover la alegría, la creatividad y la sana convivencia escolar.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="thumb" src="crazy_hat.jpeg" alt="Crazy Hat Exhibition">
+        <div class="content">
+          <h3>Crazy Hat Exhibition</h3>
+          <p class="desc">Concurso de sombreros locos donde los estudiantes ponen a prueba su imaginación y originalidad; fomenta la creatividad y el sentido festivo.</p>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Instituto Dionisio de Herrera - Tegucigalpa, Honduras
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    function loadParticles(color){
+      if(window.pJSDom && window.pJSDom.length){
+        try{ window.pJSDom[0].pJS.fn.vendors.destroypJS(); window.pJSDom = []; }catch(e){}
+      }
+      particlesJS("particles-js", {
+        particles:{ number:{value:55,density:{enable:true,value_area:800}},
+        color:{value:color}, shape:{type:"circle"},
+        opacity:{value:0.6,random:true},
+        size:{value:3,random:true},
+        line_linked:{enable:true,distance:140,color:color,opacity:0.25,width:1},
+        move:{enable:true,speed:1.6}},
+        interactivity:{ events:{ onhover:{enable:true,mode:"repulse"}, onclick:{enable:true,mode:"push"} },
+        modes:{ repulse:{distance:100}, push:{particles_nb:4} } },
+        retina_detect:true
+      });
+    }
+
+    let theme = localStorage.getItem('theme') || 'noche';
+    document.body.classList.add(theme);
+    loadParticles(theme === 'dia' ? '#b50000' : '#ffffff');
+
+    const btn = document.getElementById('themeToggle');
+    function updateBtn(){ btn.textContent = theme === 'dia' ? '🌙' : '☀️'; }
+    updateBtn();
+
+    btn.addEventListener('click', ()=>{
+      document.body.classList.remove(theme);
+      theme = (theme === 'dia') ? 'noche' : 'dia';
+      document.body.classList.add(theme);
+      localStorage.setItem('theme', theme);
+      loadParticles(theme === 'dia' ? '#b50000' : '#ffffff');
+      updateBtn();
+    });
+  </script>
+</body>
+</html>

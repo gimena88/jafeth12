@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Dionisio de Herrera - Instituto Dionisio de Herrera</title>
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ font-family:Arial, sans-serif; min-height:100vh; overflow-x:hidden; transition:background 0.5s, color 0.5s; position:relative; }
+  body.noche { background:#000; color:#fff; }
+  body.dia { background:#fff; color:#000; }
+  body::before{ content:""; position:fixed; top:0; left:0; width:100%; height:100%; background:url('escudo.png') no-repeat center center; background-size:350px; opacity:0.07; z-index:-1; pointer-events:none; }
+
+  nav{ display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:20px; position:relative; z-index:1; }
+  nav a{ display:inline-block; padding:14px 24px; border-radius:10px; font-size:1.05rem; text-decoration:none; transition:all .3s ease; animation: glow 2s infinite alternate; }
+  body.noche nav a{ background:#000; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+  body.noche nav a:hover{ background:#b50000; transform:translateY(-5px) scale(1.05); }
+  body.dia nav a{ background:#b50000; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+  body.dia nav a:hover{ background:#000; color:#fff; transform:translateY(-5px) scale(1.05); }
+
+  section{ padding:60px 20px; max-width:1000px; margin:auto; text-align:center; animation: fadeIn 2s ease; }
+  section h2{ font-size:2.2rem; margin-bottom:20px; color:#b50000; }
+  section h3{ font-size:1.6rem; margin:25px 0 15px; color:#b50000; }
+  section p{ font-size:1.15rem; line-height:1.7; margin-bottom:20px; text-align:justify; }
+
+  .bio-img{ max-width:260px; border-radius:12px; display:block; margin:20px auto; box-shadow:0 4px 15px rgba(0,0,0,0.3); animation: zoomIn 1.5s ease; }
+
+  /* ======= TIMELINE ======= */
+  .timeline {
+    position: relative;
+    margin: 60px auto;
+    padding: 20px 0;
+    width: 90%;
+    max-width: 800px;
+  }
+  .timeline::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: #b50000;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -2px;
+    z-index: 1; /* línea debajo */
+  }
+  .timeline-item {
+    padding: 20px 30px;
+    position: relative;
+    width: 50%;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease;
+  }
+  .timeline-item.show { opacity: 1; transform: translateY(0); }
+  .timeline-item.left { left: 0; text-align: right; }
+  .timeline-item.right { left: 50%; text-align: left; }
+  .timeline-item::before {
+    content: attr(data-icon);
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    border-radius: 50%;
+    background-color: #b50000;
+    color:#fff;
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border: 3px solid #fff;
+    z-index: 2; /* ícono encima */
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 10px #b50000, 0 0 20px #ff3333; /* efecto glow */
+  }
+  .timeline-item.left::before { right: -20px; }
+  .timeline-item.right::before { left: -20px; }
+  .timeline-item h4 { font-size: 1.3rem; color: #b50000; margin-bottom: 10px; }
+  .timeline-item p { font-size: 1rem; line-height: 1.6; }
+
+  /* ======= LEGADO ======= */
+  .legado { margin-top:50px; display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; text-align:center; }
+  .legado div{ padding:20px; border-radius:12px; background:rgba(0,0,0,0.05); transition:transform .3s ease; }
+  body.noche .legado div{ background:rgba(255,255,255,0.05); }
+  .legado div:hover{ transform:scale(1.05); }
+  .legado h4{ color:#b50000; margin-bottom:10px; }
+
+  /* ===== SABÍAS QUE ===== */
+  .sabias{ margin:50px auto; text-align:left; max-width:800px; }
+  .sabias ul{ list-style:none; padding:0; }
+  .sabias li{ margin:12px 0; font-size:1.1rem; }
+  .sabias li::before{ content:"👉 "; color:#b50000; font-weight:bold; }
+
+  /* ===== SLIDER FRASES ===== */
+  .slider{ margin:50px auto; max-width:800px; position:relative; overflow:hidden; }
+  .frase{ font-size:1.3rem; font-style:italic; font-weight:bold; color:#b50000; text-align:center; opacity:0; transition:opacity 1s ease; }
+  .frase.active{ opacity:1; }
+
+  footer{ text-align:center; padding:20px; font-size:0.9rem; transition:background 0.5s, color 0.5s; }
+  body.noche footer{ background:#000; color:#fff; animation: glowText 2s infinite alternate; }
+  body.dia footer{ background:#b50000; color:#fff; }
+
+  .toggle-btn{ position:fixed; top:20px; right:20px; background:#b50000; color:#fff; border:none; border-radius:50%; width:45px; height:45px; cursor:pointer; font-size:1.2rem; z-index:1000; transition:transform .3s ease; }
+  .toggle-btn:hover{ transform:scale(1.1) rotate(10deg); }
+
+  #particles-js { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; }
+
+  @keyframes glow{ from{box-shadow:0 0 10px #b50000;} to{box-shadow:0 0 25px #ff3333;} }
+  @keyframes glowText{ from{text-shadow:0 0 5px #b50000;} to{text-shadow:0 0 15px #ff3333;} }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes zoomIn{ from{opacity:0; transform:scale(0.8);} to{opacity:1; transform:scale(1);} }
+  @keyframes pulse{ 0%{transform:scale(1);} 50%{transform:scale(1.3);} 100%{transform:scale(1);} }
+</style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <button class="toggle-btn" id="themeToggle">☀️</button>
+
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="historia.html">Historia</a>
+    <a href="oferta.html">Oferta Académica</a>
+    <a href="perfiles.html">Perfiles</a> <!-- 🔹 Nuevo botón agregado -->
+    <a href="actividades.html">Actividades</a>
+    <a href="dionisio.html" aria-current="page">Dionisio de Herrera</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+
+  <section>
+    <h2>Dionisio de Herrera</h2>
+    <img src="dionisio.jpg" alt="Dionisio de Herrera" class="bio-img">
+    <p><strong>José Dionisio de la Trinidad de Herrera y Díaz del Valle</strong> (1781 - 1850) fue un destacado político, abogado y prócer hondureño. Reconocido como el primer Jefe de Estado de Honduras (1824-1827), defendió la independencia, la educación y los principios democráticos. Estudió en la Universidad de San Carlos de Guatemala donde se formó como abogado, y desde joven mostró gran interés por las leyes y el pensamiento ilustrado.</p>
+    <p>Su vida política lo llevó a ocupar cargos en Honduras y Nicaragua, donde impulsó constituciones, defendió la libertad de prensa y promovió el sistema republicano. Fue un firme defensor de la unidad centroamericana y de la educación como herramienta de transformación social.</p>
+
+    <h3>Línea de Tiempo</h3>
+    <div class="timeline">
+      <div class="timeline-item left" data-icon="👶"><h4>1781 - Nacimiento</h4><p>Nació en Choluteca, Honduras. Su infancia estuvo marcada por la formación religiosa y el contacto con ideas liberales tempranas.</p></div>
+      <div class="timeline-item right" data-icon="🎓"><h4>1800 - Estudios</h4><p>Ingresó a la Universidad de San Carlos de Guatemala, graduándose como abogado con gran influencia del pensamiento ilustrado europeo.</p></div>
+      <div class="timeline-item left" data-icon="⚔️"><h4>1821 - Independencia</h4><p>Participó en los movimientos que consolidaron la independencia de Centroamérica, defendiendo la soberanía del pueblo.</p></div>
+      <div class="timeline-item right" data-icon="🏛️"><h4>1824 - Gobierno en Honduras</h4><p>Primer Jefe de Estado de Honduras, impulsando la primera Constitución, fundando escuelas y fortaleciendo instituciones republicanas.</p></div>
+      <div class="timeline-item left" data-icon="📜"><h4>1830 - Gobierno en Nicaragua</h4><p>Promovió leyes que aseguraron estabilidad política, fomentando la democracia y el respeto a la prensa libre.</p></div>
+      <div class="timeline-item right" data-icon="🤝"><h4>1838 - Defensa de la Federación</h4><p>Apoyó la unidad centroamericana en tiempos de crisis, defendiendo la integración regional frente a divisiones internas.</p></div>
+      <div class="timeline-item left" data-icon="⭐"><h4>1850 - Legado</h4><p>Murió en El Salvador, dejando un legado de justicia, educación, unidad y principios democráticos que perduran en la historia hondureña.</p></div>
+    </div>
+
+    <h3>Legado</h3>
+    <div class="legado">
+      <div><h4>📚 Educación</h4><p>Promovió la creación de escuelas y bibliotecas, convencido de que la instrucción era la base de la libertad.</p></div>
+      <div><h4>⚖️ Justicia</h4><p>Defendió la independencia de los jueces y la aplicación justa de las leyes.</p></div>
+      <div><h4>🗳️ Democracia</h4><p>Luchó por elecciones transparentes y un sistema republicano representativo.</p></div>
+      <div><h4>🤝 Unidad</h4><p>Soñó con una Centroamérica unida, capaz de enfrentar los retos externos e internos.</p></div>
+      <div><h4>🎭 Cultura</h4><p>Impulsó la libertad de prensa, el pensamiento crítico y la difusión de ideas ilustradas.</p></div>
+      <div><h4>🌍 Visión Regional</h4><p>Fue un líder con perspectiva centroamericana, influyendo en la política de Honduras, Nicaragua y El Salvador.</p></div>
+    </div>
+
+    <h3>Sabías que...</h3>
+    <div class="sabias">
+      <ul>
+        <li>Fue tío del prócer José Cecilio del Valle.</li>
+        <li>Redactó la primera Constitución de Honduras en 1825.</li>
+        <li>Defendió la libertad de prensa como pilar de la democracia.</li>
+        <li>Introdujo ideas del liberalismo político en Centroamérica.</li>
+        <li>Su visión política trascendió fronteras, marcando generaciones.</li>
+      </ul>
+    </div>
+
+    <h3>Frases Célebres</h3>
+    <div class="slider">
+      <p class="frase active">“La educación es la base sobre la cual se levanta la libertad de los pueblos.”</p>
+      <p class="frase">“La justicia es el pilar de una nación libre.”</p>
+      <p class="frase">“El futuro de Centroamérica depende de la unión de sus pueblos.”</p>
+      <p class="frase">“Sin leyes no hay libertad, y sin libertad no hay nación.”</p>
+      <p class="frase">“El ciudadano instruido es el verdadero guardián de la república.”</p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Instituto Dionisio de Herrera - Tegucigalpa, Honduras
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    function loadParticles(color){
+      particlesJS("particles-js", {
+        "particles": {"number": {"value": 60},"color": {"value": color},"shape": {"type": "circle"},
+        "opacity": {"value": 0.4,"random": true},"size": {"value": 4,"random": true},
+        "line_linked": {"enable": true,"distance": 150,"color": color,"opacity": 0.3,"width": 1},
+        "move": {"enable": true,"speed": 2}},
+        "interactivity": {"events": {"onhover": {"enable": true,"mode": "repulse"},"onclick": {"enable": true,"mode": "push"}},
+        "modes": {"repulse": {"distance": 100},"push": {"particles_nb": 4}}},
+        "retina_detect": true
+      });
+    }
+    let theme = localStorage.getItem("theme") || "noche";
+    document.body.classList.add(theme);
+    loadParticles(theme === "dia" ? "#b50000" : "#ffffff");
+    const toggleBtn = document.getElementById("themeToggle");
+    function updateBtn(){ toggleBtn.textContent = theme === "dia" ? "🌙" : "☀️"; }
+    updateBtn();
+    toggleBtn.addEventListener("click", ()=>{ document.body.classList.remove(theme);
+      theme = (theme === "dia" ? "noche" : "dia"); document.body.classList.add(theme);
+      localStorage.setItem("theme", theme); loadParticles(theme === "dia" ? "#b50000" : "#ffffff"); updateBtn();
+    });
+
+    // Animación de timeline al hacer scroll
+    const items = document.querySelectorAll('.timeline-item');
+    const observer = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('show'); } });
+    },{threshold:0.3});
+    items.forEach(item=>observer.observe(item));
+
+    // Slider automático de frases
+    let frases = document.querySelectorAll(".frase");
+    let i = 0;
+    setInterval(()=>{
+      frases[i].classList.remove("active");
+      i = (i+1) % frases.length;
+      frases[i].classList.add("active");
+    },4000);
+  </script>
+</body>
+</html>
+ 

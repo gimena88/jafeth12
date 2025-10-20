@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Perfiles de Estudiante - Instituto Dionisio de Herrera</title>
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ font-family:Arial, sans-serif; min-height:100vh; overflow-x:hidden; transition:background 0.5s, color 0.5s; position:relative; }
+  body.noche { background:#000; color:#fff; }
+  body.dia { background:#fff; color:#000; }
+
+  body::before{ 
+    content:""; position:fixed; top:0; left:0; width:100%; height:100%;
+    background:url('escudo.png') no-repeat center center; 
+    background-size:350px; opacity:0.07; z-index:-1; pointer-events:none;
+  }
+
+  nav{ display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:20px; position:relative; z-index:1; }
+  nav a{ display:inline-block; padding:14px 22px; border-radius:10px; font-size:1rem; text-decoration:none; transition:all .3s ease; animation: glow 2s infinite alternate; }
+  body.noche nav a{ background:#000; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+  body.noche nav a:hover{ background:#b50000; transform:translateY(-5px) scale(1.05); }
+  body.dia nav a{ background:#b50000; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+  body.dia nav a:hover{ background:#000; color:#fff; transform:translateY(-5px) scale(1.05); }
+
+  header{ text-align:center; padding:60px 20px 20px; }
+  header h1{ font-size:2.4rem; margin-bottom:15px; color:#b50000; }
+  header p{ font-size:1.1rem; }
+
+  section{ padding:40px 20px; max-width:1000px; margin:auto; }
+  .perfil{ background:rgba(255,255,255,0.85); padding:25px; border-radius:15px; margin-bottom:30px; box-shadow:0 4px 12px rgba(0,0,0,0.2); transition:transform .3s ease, box-shadow .3s ease; animation: fadeIn 1.5s ease; }
+  body.noche .perfil{ background:rgba(0,0,0,0.7); color:#fff; }
+  .perfil:hover{ transform:translateY(-5px); box-shadow:0 6px 18px rgba(0,0,0,0.3); }
+  .perfil h2{ color:#b50000; margin-bottom:12px; }
+  .perfil ul{ margin-left:20px; line-height:1.7; }
+
+  footer{ text-align:center; padding:20px; font-size:0.9rem; transition:background 0.5s, color 0.5s; }
+  body.noche footer{ background:#000; color:#fff; animation: glowText 2s infinite alternate; }
+  body.dia footer{ background:#b50000; color:#fff; }
+
+  .toggle-btn{ position:fixed; top:20px; right:20px; background:#b50000; color:#fff; border:none; border-radius:50%; width:45px; height:45px; cursor:pointer; font-size:1.2rem; z-index:1000; transition:transform .3s ease; }
+  .toggle-btn:hover{ transform:scale(1.1) rotate(10deg); }
+
+  #particles-js { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; }
+
+  @keyframes glow{ from{box-shadow:0 0 10px #b50000;} to{box-shadow:0 0 25px #ff3333;} }
+  @keyframes glowText{ from{text-shadow:0 0 5px #b50000;} to{text-shadow:0 0 15px #ff3333;} }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+</style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <button class="toggle-btn" id="themeToggle">☀️</button>
+
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="historia.html">Historia</a>
+    <a href="oferta.html">Oferta Académica</a>
+    <a href="perfiles.html" aria-current="page">Perfiles de Estudiante</a>
+    <a href="actividades.html">Actividades</a>
+    <a href="dionisio.html">Dionisio de Herrera</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+
+  <header>
+    <h1>Perfiles de Estudiante</h1>
+    <p>Características y cualidades que distinguen a nuestros futuros profesionales.</p>
+  </header>
+
+  <section>
+    <div class="perfil">
+      <h2>Bachillerato Técnico Profesional en Informática</h2>
+      <ul>
+        <li>Innovación y creatividad en soluciones tecnológicas.</li>
+        <li>Capacidad para trabajar en proyectos de programación y soporte técnico.</li>
+        <li>Pensamiento lógico y resolución de problemas.</li>
+        <li>Habilidad para adaptarse a nuevas herramientas digitales.</li>
+        <li>Responsabilidad en el manejo de la información.</li>
+      </ul>
+    </div>
+
+    <div class="perfil">
+      <h2>Bachillerato Técnico Profesional en Contaduría y Finanzas</h2>
+      <ul>
+        <li>Organización y disciplina en el registro contable.</li>
+        <li>Capacidad de análisis financiero y toma de decisiones.</li>
+        <li>Ética y transparencia en la administración de recursos.</li>
+        <li>Habilidades matemáticas y de gestión económica.</li>
+        <li>Trabajo en equipo en entornos empresariales.</li>
+      </ul>
+    </div>
+
+    <div class="perfil">
+      <h2>Bachillerato en Ciencias y Humanidades (Acelerado)</h2>
+      <ul>
+        <li>Compromiso con el aprendizaje autónomo.</li>
+        <li>Desarrollo del pensamiento crítico y analítico.</li>
+        <li>Capacidad de adaptación en procesos de aprendizaje intensivos.</li>
+        <li>Interés por las ciencias sociales y naturales.</li>
+        <li>Valores humanistas y compromiso social.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Instituto Dionisio de Herrera - Tegucigalpa, Honduras
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    function loadParticles(color){
+      particlesJS("particles-js", {
+        "particles": {
+          "number": {"value": 60, "density": {"enable": true, "value_area": 800}},
+          "color": {"value": color},
+          "shape": {"type": "circle"},
+          "opacity": {"value": 0.4, "random": true},
+          "size": {"value": 4, "random": true},
+          "line_linked": {"enable": true, "distance": 150, "color": color, "opacity": 0.3, "width": 1},
+          "move": {"enable": true, "speed": 2}
+        },
+        "interactivity": {
+          "events": { "onhover": {"enable": true, "mode": "repulse"}, "onclick": {"enable": true, "mode": "push"} },
+          "modes": { "repulse": {"distance": 100}, "push": {"particles_nb": 4} }
+        },
+        "retina_detect": true
+      });
+    }
+
+    let theme = localStorage.getItem("theme") || "noche";
+    document.body.classList.add(theme);
+    loadParticles(theme === "dia" ? "#b50000" : "#ffffff");
+
+    const toggleBtn = document.getElementById("themeToggle");
+    function updateBtn(){ toggleBtn.textContent = theme === "dia" ? "🌙" : "☀️"; }
+    updateBtn();
+
+    toggleBtn.addEventListener("click", ()=>{
+      document.body.classList.remove(theme);
+      theme = (theme === "dia" ? "noche" : "dia");
+      document.body.classList.add(theme);
+      localStorage.setItem("theme", theme);
+      loadParticles(theme === "dia" ? "#b50000" : "#ffffff");
+      updateBtn();
+    });
+  </script>
+</body>
+</html>
